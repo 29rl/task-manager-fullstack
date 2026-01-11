@@ -2,17 +2,17 @@
 // Full-stack task management with JWT authentication and real-time updates
 // Built with React 18, Django REST API, and modern UI patterns
 
-import React, { useState, useEffect } from 'react';
-import './styles.css';
-import TaskList from './components/TaskList';
-import LoginForm from './components/LoginForm';
+import React, { useState, useEffect } from "react";
+import "./styles.css";
+import TaskList from "./components/TaskList";
+import LoginForm from "./components/LoginForm";
 
 /**
  * App - Main application component
  * Handles authentication state and renders appropriate view
  * - LoginForm: Shows when user is not authenticated
  * - TaskList: Shows when user is authenticated
- * 
+ *
  * Features:
  * - JWT token-based authentication
  * - Persistent login (checks localStorage on load)
@@ -23,11 +23,11 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Clear stored tokens on app startup to require fresh login after restart
-    // This forces the app to always ask for credentials after a program/server restart
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
-    setIsAuthenticated(false);
+    // Check if user has valid token on app load
+    const token = localStorage.getItem("access");
+    if (token) {
+      setIsAuthenticated(true);
+    }
     setLoading(false);
   }, []);
 
@@ -66,7 +66,6 @@ function App() {
       </div>
     );
   }
-
 
   // Main application layout - navbar + task list
   // Navbar: Sticky header with app title and logout button
