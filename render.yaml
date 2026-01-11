@@ -2,17 +2,21 @@
   - type: web
     name: task-manager
     env: python
-    buildCommand: pip install -r requirements.txt
+
+    buildCommand: |
+      pip install -r requirements.txt
+      cd backend
+      python manage.py migrate
+      python manage.py collectstatic --noinput
+
     startCommand: |
-      if [ -d 'backend' ]; then
-        cd backend && gunicorn server.wsgi:application --bind 0.0.0.0:\
-      else
-        gunicorn server.wsgi:application --bind 0.0.0.0:\
-      fi
+      cd backend
+      gunicorn server.wsgi:application
+
     envVars:
       - key: DJANGO_SECRET_KEY
         generateValue: true
-      - key: DJANGO_DEBUG
-        value: false
+      - key: DEBUG
+        value: "False"
       - key: ALLOWED_HOSTS
-        value: '*.onrender.com'
+        value: ".onrender.com"
