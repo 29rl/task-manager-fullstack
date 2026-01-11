@@ -16,6 +16,7 @@ import LoginForm from "./components/LoginForm";
  * Features:
  * - JWT token-based authentication
  * - Persistent login (checks localStorage on load)
+ * - JWT expiry validation
  * - Logout with state reset
  */
 function App() {
@@ -23,11 +24,29 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user has valid token on app load
+    // Check for valid JWT token with expiry validation
     const token = localStorage.getItem("access");
+
     if (token) {
-      setIsAuthenticated(true);
+      // Verify token is not expired
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const isExpired = payload.exp * 1000 < Date.now();
+
+        if (isExpired) {
+          localStorage.clear();
+          setIsAuthenticated(false);
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch {
+        localStorage.clear();
+        setIsAuthenticated(false);
+      }
+    } else {
+      setIsAuthenticated(false);
     }
+
     setLoading(false);
   }, []);
 
@@ -101,3 +120,4 @@ function App() {
 }
 
 export default App;
+  
