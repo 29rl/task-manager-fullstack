@@ -15,8 +15,8 @@ import LoginForm from "./components/LoginForm";
  *
  * Features:
  * - JWT token-based authentication
- * - Persistent login (checks localStorage on load)
- * - JWT expiry validation
+ * - Persistent login (checks backend on load)
+ * - JWT validation via backend
  * - Logout with state reset
  */
 function App() {
@@ -24,30 +24,45 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for valid JWT token with expiry validation
-    const token = localStorage.getItem("access");
+    async function checkAuth() {
+      const token = localStorage.getItem("access");
 
-    if (token) {
-      // Verify token is not expired
+      // No token = not authenticated
+      if (!token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+
       try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        const isExpired = payload.exp * 1000 < Date.now();
+        // IMPORTANT: verify token with backend, not just by decoding it
+        const response = await fetch(
+          "https://task-manager-api-ux4e.onrender.com/api/auth/me/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        if (isExpired) {
+        if (!response.ok) {
+          // Token is invalid, expired, or from another environment
           localStorage.clear();
           setIsAuthenticated(false);
         } else {
+          // Token is valid
           setIsAuthenticated(true);
         }
-      } catch {
+      } catch (error) {
+        // Network or backend error → treat as logged out
         localStorage.clear();
         setIsAuthenticated(false);
       }
-    } else {
-      setIsAuthenticated(false);
+
+      setLoading(false);
     }
 
-    setLoading(false);
+    checkAuth();
   }, []);
 
   const handleLogout = () => {
@@ -87,8 +102,6 @@ function App() {
   }
 
   // Main application layout - navbar + task list
-  // Navbar: Sticky header with app title and logout button
-  // TaskList: Main content area with all task management features
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
       {/* Header/Navigation */}
@@ -111,6 +124,7 @@ function App() {
 
       {/* Main Content */}
       <TaskList />
+
       <footer className="mt-12 py-8 text-center text-blue-400 text-sm border-t border-blue-700/50">
         Task Manager © 2026 • Built by{" "}
         <span className="text-blue-300 font-semibold">29RL</span>
@@ -120,4 +134,3 @@ function App() {
 }
 
 export default App;
-  
