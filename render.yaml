@@ -1,0 +1,18 @@
+﻿services:
+  - type: web
+    name: task-manager
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: |
+      if [ -d 'backend' ]; then
+        cd backend && gunicorn server.wsgi:application --bind 0.0.0.0:\
+      else
+        gunicorn server.wsgi:application --bind 0.0.0.0:\
+      fi
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: '*.onrender.com'
