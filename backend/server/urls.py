@@ -1,13 +1,21 @@
 from django.contrib import admin
-from django.urls import path, include, re_path
-from django.views.generic import TemplateView
+from django.urls import path, include
+from django.http import JsonResponse
+
+def api_root(request):
+    return JsonResponse({
+        "message": "Task Manager API",
+        "endpoints": {
+            "tasks": "/api/tasks/",
+            "auth_register": "/api/auth/register/",
+            "auth_login": "/api/token/",
+            "auth_refresh": "/api/token/refresh/",
+            "auth_me": "/api/auth/me/",
+        }
+    })
 
 urlpatterns = [
+    path("", api_root, name="api_root"),
     path("admin/", admin.site.urls),
     path("api/", include("tasks.urls")),
-]
-
-# React SPA fallback
-urlpatterns += [
-    re_path(r"^.*$", TemplateView.as_view(template_name="index.html")),
 ]
