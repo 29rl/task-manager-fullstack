@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const API = "https://task-manager-api-ux4e.onrender.com";
 /**
  * LoginForm - Authentication component
  * 
@@ -68,7 +69,7 @@ const LoginForm = ({ onLoginSuccess }) => {
 
     try {
       // Request JWT tokens from backend
-      const res = await axios.post('http://localhost:8000/api/token/', formData);
+      const res = await axios.post(`${API}/api/token/`, formData);
       
       // Store tokens in localStorage for future requests
       localStorage.setItem('access', res.data.access);
@@ -129,7 +130,7 @@ const LoginForm = ({ onLoginSuccess }) => {
 
     try {
       // Send registration request to backend
-      await axios.post('http://localhost:8000/api/auth/register/', registerData);
+      await axios.post(`${API}/api/auth/register/`, registerData);
       
       // Clear form and switch to login tab
       setRegisterData({ username: '', email: '', password: '', password2: '' });
