@@ -3,7 +3,7 @@ import axios from "axios";
 /**
  * RENDER BACKEND URL
  */
-const BASE_URL = "https://task-manager-fullstack-9ij8.onrender.com";
+const BASE_URL = "https://task-manager-api-ux4e.onrender.com";
 
 /**
  * API instance
