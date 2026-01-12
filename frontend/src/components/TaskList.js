@@ -144,7 +144,7 @@ const TaskList = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 to-blue-700 flex justify-center">
       <div className="w-full max-w-7xl px-6 pt-32">
-        <div className="grid grid-cols-[460px_minmax(0,650px)] gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[460px_minmax(0,650px)] gap-6 lg:gap-20 items-start">
           {" "}
           {/* ADD TASK – CARD CA LOGIN */}
           <div className="bg-blue-900 bg-opacity-40 backdrop-blur-xl rounded-2xl p-5 shadow-xl border border-blue-700">
@@ -181,7 +181,7 @@ const TaskList = () => {
             {tasks.length > 0 && (
               <div className="mt-8 bg-blue-900 bg-opacity-40 backdrop-blur-xl rounded-2xl p-6 border border-blue-700">
                 <div className="flex items-center gap-4 min-w-0">
-                  <p className="text-blue-200 whitespace-nowrap">
+                  <p className="text-blue-200 break-words">
                     {tasks.filter((t) => t.status === "done").length} /{" "}
                     {tasks.length}
                   </p>
