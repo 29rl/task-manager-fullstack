@@ -63,6 +63,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-blue-900 text-white">
+      {/* Back to Portfolio */}
+      <a
+        href="https://robertlisita.dev"
+        className="fixed top-4 left-4 z-50 bg-black/60 backdrop-blur-md border border-white/10 text-green-400 px-4 py-2 rounded-lg text-sm font-semibold shadow-lg hover:bg-black/80 transition"
+      >
+        ← Back to Portfolio
+      </a>
+
       <nav className="bg-blue-950 p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">Task Manager</h1>
         <button
